@@ -10,9 +10,19 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"gonic-trial/middlewares"
+	"gonic-trial/logging"
+	
 )
 
+
+
+
 func main() {
+
+	logging.Debug(true)
+	logging.Log("I am alive...")
+
 	/*
 	  How to write a log file
 	*/
@@ -40,7 +50,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/hello", helloWorld)
-		v1.GET("/bye", goodbyeWorld)
+		v1.GET("/bye", middlewares.CheckPermission("admin"), goodbyeWorld)
 	}
 
 	router.GET("/ping", func (c *gin.Context) {
