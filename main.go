@@ -12,6 +12,8 @@ import (
 	"github.com/joho/godotenv"
 	"gonic-trial/middlewares"
 	"gonic-trial/logging"
+	"gonic-trial/models"
+	"gonic-trial/todos"
 	
 )
 
@@ -22,6 +24,8 @@ func main() {
 
 	logging.Debug(true)
 	logging.Log("I am alive...")
+
+	models.ConnectDatabase()
 
 	/*
 	  How to write a log file
@@ -51,6 +55,16 @@ func main() {
 	{
 		v1.GET("/hello", helloWorld)
 		v1.GET("/bye", middlewares.CheckPermission("admin"), goodbyeWorld)
+
+		todoRouter := v1.Group("/todos")
+		{ 
+			todoRouter.POST("/", todos.CreateTodo)
+			todoRouter.GET("/", todos.GetTodos)
+			todoRouter.GET("/:id", todos.FindTodo)
+			todoRouter.PUT("/:id", todos.UpdateTodo)
+			todoRouter.DELETE("/:id", todos.DeleteTodo)
+		}
+
 	}
 
 	router.GET("/ping", func (c *gin.Context) {
